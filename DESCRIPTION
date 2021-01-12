@@ -1,0 +1,29 @@
+Package: delaySim
+Type: Package
+Title: Package to run delayed diagnosis simulations
+Version: 0.1.0
+Author: Who wrote it
+Maintainer: Aaron Miller <aaron-miller@uiowa.edu>
+Description: Still need a longer description
+License: GPL
+Encoding: UTF-8
+LazyData: true
+Imports: 
+    tibble,
+    dplyr,
+    glue,
+    checkmate,
+    magrittr,
+    stringr,
+    tidyr,
+    purrr,
+    rlang,
+    broom,
+    ggplot2,
+    modelr,
+    multidplyr,
+    lubridate,
+    trend,
+    changepoint,
+    stats
+RoxygenNote: 7.1.1
