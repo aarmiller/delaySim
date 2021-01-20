@@ -22,7 +22,9 @@ sim_miss_visits <- function (sim_data, sim_algorithm="simple", sim_ctrl = NULL) 
     miss_draw <- run_sim_draw_simple_cor(sim_data=sim_data,sim_ctrl = sim_ctrl)
 
   } else if (sim_algorithm=="general") {
-
+    
+    miss_draw <- run_sim_draw_general(sim_data=sim_data,sim_ctrl = sim_ctrl)
+    
   }
 
   ## Compute number missed and miss duration by patient ##

@@ -110,3 +110,13 @@ Notice that:
 -   `alpha=1` maximizes the number of individuals with a delay (i.e., under the curve)
 
 ### Generalized Algorithm
+
+The last algorithm is the generalized algorithm which takes a weighting function and draws visits corresponding to these weights. The weighting function can account for the number of visits a patient had during the diagnostic opportunity window, the number of distinct SSDs they presented with and the number of times they were previously drawn in the simulation.
+
+Here we apply the general algorithm using the default `simple_weight_sum()` function; this function simply sums the number of current and prior visits, distinct ssd and prior draws for each patient as the weight.
+
+```{r}
+sim_miss_visits(example_sim_data,
+                sim_algorithm = "general",
+                sim_ctrl = sim_ctrl(weight_function = simple_weight_sum))
+```

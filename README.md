@@ -140,40 +140,40 @@ sim_miss_visits(example_sim_data)
 #> # A tibble: 8 x 3
 #>   n_vis_groups     n percent
 #>   <chr>        <int>   <dbl>
-#> 1 0             2212  65.6  
-#> 2 >= 1          1159  34.4  
-#> 3 >= 2           357  10.6  
-#> 4 >= 3            94   2.79 
-#> 5 >= 4            29   0.860
-#> 6 >= 5             7   0.208
-#> 7 >= Mean        357  10.6  
-#> 8 >= Median     1159  34.4  
+#> 1 0             2201  65.3  
+#> 2 >= 1          1170  34.7  
+#> 3 >= 2           338  10.0  
+#> 4 >= 3           108   3.20 
+#> 5 >= 4            24   0.712
+#> 6 >= 5             9   0.267
+#> 7 >= Mean        338  10.0  
+#> 8 >= Median     1170  34.7  
 #> 
 #> $sum_duration
 #> # A tibble: 13 x 3
 #>    bins          n percent
 #>    <chr>     <int>   <dbl>
-#>  1 >= 0       1159  100   
-#>  2 >= 2       1087   93.8 
-#>  3 >= 4        984   84.9 
-#>  4 >= 6        862   74.4 
-#>  5 >= 8        643   55.5 
-#>  6 >= 10       556   48.0 
-#>  7 >= 12       518   44.7 
-#>  8 >= 14       337   29.1 
-#>  9 >= 16       257   22.2 
-#> 10 >= 18       207   17.9 
-#> 11 >= 21        50    4.31
-#> 12 >= Mean     531   45.8 
-#> 13 >= Median   600   51.8 
+#>  1 >= 0       1170  100   
+#>  2 >= 2       1093   93.4 
+#>  3 >= 4        979   83.7 
+#>  4 >= 6        862   73.7 
+#>  5 >= 8        655   56.0 
+#>  6 >= 10       574   49.1 
+#>  7 >= 12       535   45.7 
+#>  8 >= 14       350   29.9 
+#>  9 >= 16       256   21.9 
+#> 10 >= 18       208   17.8 
+#> 11 >= 21        50    4.27
+#> 12 >= Mean     549   46.9 
+#> 13 >= Median   616   52.6 
 #> 
 #> $miss_summary
 #> # A tibble: 1 x 27
 #>   n_pat mean_n_vis median_n_vis mean_n_vis_out median_n_vis_out mean_n_vis_ed
-#>   <int>      <dbl>        <int>          <dbl>            <int>         <dbl>
-#> 1  1159       1.43            1           1.30                1        0.0328
-#> # … with 21 more variables: median_n_vis_ed <int>, mean_n_vis_inpatient <dbl>,
-#> #   median_n_vis_inpatient <int>, min_dur <dbl>, mean_dur <dbl>,
+#>   <int>      <dbl>        <dbl>          <dbl>            <dbl>         <dbl>
+#> 1  1170       1.41            1           1.30                1        0.0299
+#> # … with 21 more variables: median_n_vis_ed <dbl>, mean_n_vis_inpatient <dbl>,
+#> #   median_n_vis_inpatient <dbl>, min_dur <dbl>, mean_dur <dbl>,
 #> #   median_dur <dbl>, max_dur <dbl>, n_vis <int>, n_vis_out <int>,
 #> #   n_vis_ed <int>, n_vis_inpatient <int>, n_vis_mean_w0 <dbl>,
 #> #   n_vis_out_mean_w0 <dbl>, n_vis_ed_mean_w0 <dbl>,
@@ -201,38 +201,38 @@ sim_miss_visits(example_sim_data,sim_algorithm = "simple_correlated")
 #> # A tibble: 8 x 3
 #>   n_vis_groups     n percent
 #>   <chr>        <int>   <dbl>
-#> 1 0             2467   73.2 
-#> 2 >= 1           904   26.8 
-#> 3 >= 2           385   11.4 
-#> 4 >= 3           183    5.43
-#> 5 >= 4            77    2.28
-#> 6 >= 5            42    1.25
-#> 7 >= Mean        385   11.4 
-#> 8 >= Median      904   26.8 
+#> 1 0             2471   73.3 
+#> 2 >= 1           900   26.7 
+#> 3 >= 2           395   11.7 
+#> 4 >= 3           176    5.22
+#> 5 >= 4            86    2.55
+#> 6 >= 5            43    1.28
+#> 7 >= Mean        395   11.7 
+#> 8 >= Median      900   26.7 
 #> 
 #> $sum_duration
 #> # A tibble: 13 x 3
 #>    bins          n percent
 #>    <chr>     <int>   <dbl>
-#>  1 >= 0        904  100   
-#>  2 >= 2        839   92.8 
-#>  3 >= 4        743   82.2 
-#>  4 >= 6        638   70.6 
-#>  5 >= 8        475   52.5 
-#>  6 >= 10       417   46.1 
-#>  7 >= 12       392   43.4 
-#>  8 >= 14       260   28.8 
-#>  9 >= 16       200   22.1 
-#> 10 >= 18       173   19.1 
-#> 11 >= 21        50    5.53
-#> 12 >= Mean     400   44.2 
-#> 13 >= Median   475   52.5 
+#>  1 >= 0        900  100   
+#>  2 >= 2        836   92.9 
+#>  3 >= 4        739   82.1 
+#>  4 >= 6        636   70.7 
+#>  5 >= 8        472   52.4 
+#>  6 >= 10       415   46.1 
+#>  7 >= 12       390   43.3 
+#>  8 >= 14       266   29.6 
+#>  9 >= 16       212   23.6 
+#> 10 >= 18       185   20.6 
+#> 11 >= 21        50    5.56
+#> 12 >= Mean     398   44.2 
+#> 13 >= Median   472   52.4 
 #> 
 #> $miss_summary
 #> # A tibble: 1 x 27
 #>   n_pat mean_n_vis median_n_vis mean_n_vis_out median_n_vis_out mean_n_vis_ed
 #>   <int>      <dbl>        <dbl>          <dbl>            <dbl>         <dbl>
-#> 1   904       1.82            1           1.68                1        0.0354
+#> 1   900       1.83            1           1.67                1        0.0489
 #> # … with 21 more variables: median_n_vis_ed <dbl>, mean_n_vis_inpatient <dbl>,
 #> #   median_n_vis_inpatient <dbl>, min_dur <dbl>, mean_dur <dbl>,
 #> #   median_dur <dbl>, max_dur <dbl>, n_vis <int>, n_vis_out <int>,
@@ -252,9 +252,9 @@ res0 <-  sim_miss_visits(example_sim_data,sim_algorithm = "simple_correlated",si
 res1 <-  sim_miss_visits(example_sim_data,sim_algorithm = "simple_correlated",sim_ctrl = sim_ctrl(alpha = 1))
 
 res0$miss_summary$n_pat
-#> [1] 635
+#> [1] 612
 res1$miss_summary$n_pat
-#> [1] 1603
+#> [1] 1608
 ```
 
 Notice that:
@@ -266,3 +266,65 @@ Notice that:
     under the curve)
 
 ### Generalized Algorithm
+
+The last algorithm is the generalized algorithm which takes a weighting
+function and draws visits corresponding to these weights. The weighting
+function can account for the number of visits a patient had during the
+diagnostic opportunity window, the number of distinct SSDs they
+presented with and the number of times they were previously drawn in the
+simulation.
+
+Here we apply the general algorithm using the default
+`simple_weight_sum()` function; this function simply sums the number of
+current and prior visits, distinct ssd and prior draws for each patient
+as the weight.
+
+``` r
+sim_miss_visits(example_sim_data,
+                sim_algorithm = "general",
+                sim_ctrl = sim_ctrl(weight_function = simple_weight_sum))
+#> $sum_n_miss
+#> # A tibble: 8 x 3
+#>   n_vis_groups     n percent
+#>   <chr>        <int>   <dbl>
+#> 1 0             2424   71.9 
+#> 2 >= 1           947   28.1 
+#> 3 >= 2           365   10.8 
+#> 4 >= 3           139    4.12
+#> 5 >= 4            75    2.22
+#> 6 >= 5            46    1.36
+#> 7 >= Mean        365   10.8 
+#> 8 >= Median      947   28.1 
+#> 
+#> $sum_duration
+#> # A tibble: 13 x 3
+#>    bins          n percent
+#>    <chr>     <int>   <dbl>
+#>  1 >= 0        947  100   
+#>  2 >= 2        889   93.9 
+#>  3 >= 4        803   84.8 
+#>  4 >= 6        714   75.4 
+#>  5 >= 8        543   57.3 
+#>  6 >= 10       489   51.6 
+#>  7 >= 12       462   48.8 
+#>  8 >= 14       310   32.7 
+#>  9 >= 16       233   24.6 
+#> 10 >= 18       190   20.1 
+#> 11 >= 21        50    5.28
+#> 12 >= Mean     470   49.6 
+#> 13 >= Median   489   51.6 
+#> 
+#> $miss_summary
+#> # A tibble: 1 x 27
+#>   n_pat mean_n_vis median_n_vis mean_n_vis_out median_n_vis_out mean_n_vis_ed
+#>   <int>      <dbl>        <int>          <dbl>            <int>         <dbl>
+#> 1   947       1.74            1           1.57                1        0.0486
+#> # … with 21 more variables: median_n_vis_ed <int>, mean_n_vis_inpatient <dbl>,
+#> #   median_n_vis_inpatient <int>, min_dur <dbl>, mean_dur <dbl>,
+#> #   median_dur <dbl>, max_dur <dbl>, n_vis <int>, n_vis_out <int>,
+#> #   n_vis_ed <int>, n_vis_inpatient <int>, n_vis_mean_w0 <dbl>,
+#> #   n_vis_out_mean_w0 <dbl>, n_vis_ed_mean_w0 <dbl>,
+#> #   n_vis_inpatient_mean_w0 <dbl>, dur_mean_w0 <dbl>, n_vis_median_w0 <dbl>,
+#> #   n_vis_out_median_w0 <dbl>, n_vis_ed_median_w0 <dbl>,
+#> #   n_vis_inpatient_median_w0 <dbl>, dur_median_w0 <dbl>
+```
