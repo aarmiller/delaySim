@@ -1,0 +1,112 @@
+---
+output: github_document
+---
+
+<!-- README.md is generated from README.Rmd. Please edit that file -->
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  fig.path = "man/figures/README-",
+  out.width = "100%"
+)
+```
+
+# delaySim
+
+<!-- badges: start -->
+
+<!-- badges: end -->
+
+The delaySim package performs simulations to estimate the frequency and duration of diagnostic delays. The package contains three different algorithms for simulating missed opportunities.
+
+## Installation
+
+You can install the delaySim package using the following:
+
+``` r
+# install.packages("devtools")
+devtools::install_github("aarmiller/delaySim")
+```
+
+Before using the package it is helpful to also load the `tidyverse` package:
+
+```{r message=FALSE, warning=FALSE}
+library(tidyverse)
+library(delaySim)
+```
+
+## Example
+
+The package comes pre-loaded with an example dataset for performing example simulations. (To perform simulation using the package, your dataset should be formatted in a similar manner):
+
+```{r example}
+## View the example dataset
+data("example_sim_data")
+example_sim_data
+```
+
+This example dataset is a list with 4 different pieces of information.
+
+1.  `example_sim_data$time_map` - is a time_map of visits during the *diagnostic opportunity window.* This data.frame should contain columns with the following names and corresponding information
+
+    -   **patient_id** - an integer indicating the unique patient id
+
+    -   **period** - a period marker defining each time point in the diagnostic opportunity window, with 1 as the time period nearest the index diagnosis date and the highest value occurring at the change-point period
+
+    -   **days_since_dx** - a time variable indicating the number of days since diagnosis (these values should be ≤-1
+
+    -   **miss_ind** - an indicator if the visit contains any SSD diagnosis
+
+    -   **inpatient** - an indicator if the visit corresponded to an inpatient visits
+
+    -   **ed** - an indicator if the visit corresponded to an inpatient visits
+
+    -   **ssd1-ssdx** - indicator variables for the
+
+2.  `example_sim_data$miss_bins_visits` - is a dataset containing the number of missed visits that should be drawn at each period during the diagnostic opportunity window. This data.frame should contain columns with the following names and corresponding information
+
+    -   **period** - a period marker defining each time point in the diagnostic opportunity window, with 1 as the time period nearest the index diagnosis date and the highest value occurring at the change-point period
+
+3.  `example_sim_data$change_point` - is an integer giving the period representing the change-point, or furthest period in the diagnostic opportunity window
+
+4.  `example_sim_data$total_patients` - is an integer giving the total number of patients in the simulation (note: this value must be provided since some individuals may not have visits occurring in the time_map provided)
+
+### Simple Uncorrelated Algorithm
+
+The first algorithm draws patients at each time period
+
+```{r}
+sim_miss_visits(example_sim_data)
+```
+
+\# the next option is to use the simple_correlated algorithm
+
+### Simple Correlated Algorithm
+
+The second algorithm draws cases at each period using a preference based on whether or not the patient was drawn in prior period. The preference is determined by the parameter `alpha` where `alpha=0` denotes strict preference to drawing previously selected patients, `alpha=1` denotes strict preference to patients not previously drawn and `alpha=0.5` denotes equal preference.
+
+By default alpha is set to 0.5
+
+```{r}
+sim_miss_visits(example_sim_data,sim_algorithm = "simple_correlated")
+```
+
+You can change the value of alpha using the `sim_ctrl()` function. Here we compare the number of patients estimated to have been missed using different values for alpha:
+
+```{r}
+res0 <-  sim_miss_visits(example_sim_data,sim_algorithm = "simple_correlated",sim_ctrl = sim_ctrl(alpha = 0))
+res1 <-  sim_miss_visits(example_sim_data,sim_algorithm = "simple_correlated",sim_ctrl = sim_ctrl(alpha = 1))
+
+res0$miss_summary$n_pat
+res1$miss_summary$n_pat
+```
+
+Notice that:
+
+-   `alpha=0` minimizes the number of individuals with a delay (i.e., under the curve)
+
+-   `alpha=1` maximizes the number of individuals with a delay (i.e., under the curve)
+
+### Generalized Algorithm

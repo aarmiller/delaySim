@@ -61,9 +61,12 @@ sim_miss_visits <- function (sim_data, sim_algorithm="simple", sim_ctrl = NULL) 
 #' Control function for specifying simulation parameters
 #'
 #' @param alpha draw parameter for simple_correlated simulation
+#' @param weight_function a weighting function to use in the third simulation algorithm
 #'
 #' @export
 #'
-sim_ctrl <- function(alpha=0.5){
-  list(alpha = alpha)
+sim_ctrl <- function(alpha=0.5,weight_function=simple_weight_sum){
+  list(alpha = alpha,
+       weight_function = weight_function)
 }
+

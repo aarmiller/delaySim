@@ -4,10 +4,12 @@
 \alias{sim_ctrl}
 \title{Control function for specifying simulation parameters}
 \usage{
-sim_ctrl(alpha = 0.5)
+sim_ctrl(alpha = 0.5, weight_function = simple_weight_sum)
 }
 \arguments{
 \item{alpha}{draw parameter for simple_correlated simulation}
+
+\item{weight_function}{a weighting function to use in the third simulation algorithm}
 }
 \description{
 Control function for specifying simulation parameters

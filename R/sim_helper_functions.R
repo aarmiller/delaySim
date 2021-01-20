@@ -32,7 +32,7 @@ run_sim_draw_simple_cor <- function(sim_data,sim_ctrl){
   prior_set <- list()
 
 
-  for (i in sim_data$change_point:0){
+  for (i in sim_data$change_point:1){
 
     # set of visits at given period from patients previously drawn
     prior_draw <- sim_data$time_map %>%
@@ -89,4 +89,84 @@ run_sim_draw_simple_cor <- function(sim_data,sim_ctrl){
     dplyr::select(-rand)
 
   return(out)
+}
+
+
+#' Draw Missed Visits Using the generalized algorithm
+#'
+#' @param sim_ctrl the control function specifying the simulation parameters. This simulation uses
+#'                 the parameters...
+#'
+#' @export
+run_sim_draw_general <- function(sim_data,sim_ctrl){
+  
+  # create data frame of variables to compute weights
+  # rows for 1) SSD Visits, 2) Distinct SSDs, 3) Number of times drawn
+  # 1 and 2 are created outside the simulation. 3 is done at each step
+  weight_data <- sim_data$time_map %>% 
+    dplyr::filter(miss_ind==1) %>% 
+    dplyr::arrange(patient_id,days_since_dx) %>% 
+    dplyr::group_by(patient_id) %>%
+    dplyr::mutate_at(dplyr::vars(contains("ssd")),~cumsum(.)>0) %>% 
+    dplyr::mutate(distinct_visits=dplyr::row_number()) %>% # note the time-map needs to be for distinct visits
+    dplyr::ungroup() %>% 
+    dplyr::mutate(distinct_ssds=rowSums(.[7:10])) %>% 
+    dplyr::group_by(period) %>% 
+    tidyr::nest() %>% 
+    dplyr::arrange(dplyr::desc(period))
+  
+  # update weight data at first step compute weights
+  weight_data$data[[1]] <- weight_data$data[[1]] %>% 
+    dplyr::mutate(prior_draws=0) %>% 
+    dplyr::mutate(weight=sim_ctrl$weight_function(distinct_visits,distinct_ssds,prior_draws)) %>% 
+    dplyr::mutate(weight2=weight/sum(weight)) 
+  
+  # draw sample - replace 4 with the number needing to be drawn
+  tmp_draw <- sample(1:nrow(weight_data$data[[1]]),
+                     size = sim_data$miss_bins_visits$num_miss[1],
+                     prob = weight_data$data[[1]]$weight2)
+  
+  # the final drawn set
+  draw_set <- weight_data$data[[1]][tmp_draw,]
+  
+  # loop over remaining periods
+  for (i in 2:sim_data$change_point){
+    
+    # count the number of times a patient has been previously drawn
+    tmp_draw_counts <- draw_set %>% 
+      dplyr::count(patient_id) %>% 
+      dplyr::rename(prior_draws=n)
+    
+    # update time_map for given period with weights
+    weight_data$data[[i]] <- weight_data$data[[i]] %>% 
+      dplyr::left_join(tmp_draw_counts,by = "patient_id") %>% 
+      dplyr::mutate(prior_draws=ifelse(is.na(prior_draws),0,prior_draws)) %>% 
+      dplyr::mutate(weight=sim_ctrl$weight_function(distinct_visits,distinct_ssds,prior_draws)) %>% 
+      dplyr::mutate(weight2=weight/sum(weight)) 
+    
+    # draw sample - replace 4 with the number needing to be drawn
+    tmp_draw <- sample(1:nrow(weight_data$data[[i]]),
+                       size = sim_data$miss_bins_visits$num_miss[i],
+                       prob = weight_data$data[[i]]$weight2)
+    
+    # update the final drawn set
+    draw_set <- rbind(draw_set,weight_data$data[[i]][tmp_draw,])
+  }
+  
+  out <- draw_set
+  # out <- select(draw_set,
+  #               patient_id,days_since_dx)
+  return(out)
+}
+
+#' simple weight function function for algorithm 3
+#'
+#' @param num_distinct_visits number of distinct visits up to the time-point
+#' @param num_distinct_ssds number of distinct ssds up to the time-point
+#' @param num_prior_draws number of times the individual has been previously drawn
+#'
+#' @export
+#'
+simple_weight_sum <- function(num_distinct_visits,num_distinct_ssds,num_prior_draws){
+  num_distinct_visits+num_distinct_ssds+num_prior_draws
 }
