@@ -7,9 +7,17 @@
 run_sim_draw_simple_cor(sim_data, sim_ctrl)
 }
 \arguments{
+\item{sim_data}{a simulation dataset containing time_map, miss_bins, change_point and number of patients}
+
 \item{sim_ctrl}{the control function specifying the simulation parameters. This simulation uses
-the parameter "alpha"}
+the parameter "alpha." The default value is set to}
 }
 \description{
 Draw Missed Visits Using the simple correlated draw algorithm
+}
+\examples{
+# Usage of run_sim_draw_simple_cor() while specifying alpha=0
+run_sim_draw_simple_cor(sim_data = example_sim_data,
+                        sim_ctrl = sim_ctrl(alpha = 0))
+
 }

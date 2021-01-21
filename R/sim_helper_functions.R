@@ -3,8 +3,14 @@
 
 #' Draw Missed Visits Using the simple algorithm
 #'
+#' @param sim_data a simulation dataset containing time_map, miss_bins, change_point and number of patients
 #'
 #' @export
+#' 
+#' @examples 
+#' # Basic usage of run_sim_draw_simple 
+#' run_sim_draw_simple(sim_data = example_sim_data)
+#' 
 run_sim_draw_simple <- function(sim_data){
   out <- sim_data$time_map %>%
     dplyr::filter(miss_ind==1) %>%  # filter to miss (i.e., SSD) visits
@@ -21,10 +27,17 @@ run_sim_draw_simple <- function(sim_data){
 
 #' Draw Missed Visits Using the simple correlated draw algorithm
 #'
+#' @param sim_data a simulation dataset containing time_map, miss_bins, change_point and number of patients
 #' @param sim_ctrl the control function specifying the simulation parameters. This simulation uses
-#'                 the parameter "alpha"
+#'                 the parameter "alpha." The default value is set to
 #'
 #' @export
+#' 
+#' @examples 
+#' # Usage of run_sim_draw_simple_cor() while specifying alpha=0
+#' run_sim_draw_simple_cor(sim_data = example_sim_data,
+#'                         sim_ctrl = sim_ctrl(alpha = 0))
+#' 
 run_sim_draw_simple_cor <- function(sim_data,sim_ctrl){
 
   draw_set <- c()
@@ -91,13 +104,21 @@ run_sim_draw_simple_cor <- function(sim_data,sim_ctrl){
   return(out)
 }
 
-
 #' Draw Missed Visits Using the generalized algorithm
 #'
+#' @param sim_data a simulation dataset containing time_map, miss_bins, change_point and number of patients
 #' @param sim_ctrl the control function specifying the simulation parameters. This simulation uses
-#'                 the parameters...
+#'                 as a parameter a weighting function, weight_function. The default weight_function is
+#'                 the additive function simple_weight_sum() which simply adds together the number of distinct 
+#'                 visits, number of distinct SSDs and the number of times previously selected.
 #'
 #' @export
+#' 
+#' @examples 
+#' # Usage of run_sim_draw_simple_cor() while specifying weight_function=simple_weight_sum
+#' run_sim_draw_general(sim_data = example_sim_data,
+#'                      sim_ctrl = sim_ctrl(weight_function=simple_weight_sum))
+#' 
 run_sim_draw_general <- function(sim_data,sim_ctrl){
   
   # create data frame of variables to compute weights

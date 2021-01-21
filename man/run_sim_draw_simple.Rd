@@ -6,6 +6,14 @@
 \usage{
 run_sim_draw_simple(sim_data)
 }
+\arguments{
+\item{sim_data}{a simulation dataset containing time_map, miss_bins, change_point and number of patients}
+}
 \description{
 Draw Missed Visits Using the simple algorithm
+}
+\examples{
+# Basic usage of run_sim_draw_simple 
+run_sim_draw_simple(sim_data = example_sim_data)
+
 }

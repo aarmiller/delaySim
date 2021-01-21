@@ -7,9 +7,42 @@
 sim_miss_visits(sim_data, sim_algorithm = "simple", sim_ctrl = NULL)
 }
 \arguments{
-\item{sim_data}{a dataset containing the time_map, miss bins and other parameters used for the simulation.
-This dataset should be created using the `prep_sim_data()` function}
+\item{sim_data}{a dataset containing the time_map, miss bin visit counts, change point
+and number of patients}
+
+\item{sim_algorithm}{a string defining the algorithm to use. Option include "simple", 
+"simple_correlated" and "general"}
+
+\item{sim_ctrl}{the sim_ctrl function that defines additional parameter values passed to the 
+simulation. If no value is supplied (i.e., sim_ctrl = NULL) then default 
+values for the sim_ctrl() function will be used}
 }
 \description{
 Simulated miss visits from an estimated set of miss bins
+}
+\examples{
+# Usage of the simple simulation approach
+sim_miss_visits(sim_data=example_sim_data,
+                sim_algorithm = "simple")
+
+# Usage of the simple correlated simulation approach with default parameters (i.e., alpha=0.5)
+sim_miss_visits(sim_data=example_sim_data,
+                sim_algorithm = "simple_correlated")
+
+# Usage of the simple correlated simulation approach with default parameters (i.e., alpha=0.5)
+sim_miss_visits(sim_data=example_sim_data,
+                sim_algorithm = "simple_correlated",
+                sim_ctrl = sim_ctrl(alpha = 0))
+             
+# Usage of the general algorithm with default weight function
+sim_miss_visits(sim_data=example_sim_data,
+                sim_algorithm = "general")
+        
+# Usage with a weight function that places equal weight on all visits. Note: this effectively
+# implements the simple algorithm.                        
+sim_miss_visits(sim_data=example_sim_data,
+                sim_algorithm = "general",
+                sim_ctrl = sim_ctrl(weight_function = function(a,b,c) 1))
+
+
 }

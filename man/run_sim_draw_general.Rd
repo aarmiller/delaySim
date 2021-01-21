@@ -7,9 +7,19 @@
 run_sim_draw_general(sim_data, sim_ctrl)
 }
 \arguments{
+\item{sim_data}{a simulation dataset containing time_map, miss_bins, change_point and number of patients}
+
 \item{sim_ctrl}{the control function specifying the simulation parameters. This simulation uses
-the parameters...}
+as a parameter a weighting function, weight_function. The default weight_function is
+the additive function simple_weight_sum() which simply adds together the number of distinct 
+visits, number of distinct SSDs and the number of times previously selected.}
 }
 \description{
 Draw Missed Visits Using the generalized algorithm
+}
+\examples{
+# Usage of run_sim_draw_simple_cor() while specifying weight_function=simple_weight_sum
+run_sim_draw_general(sim_data = example_sim_data,
+                     sim_ctrl = sim_ctrl(weight_function=simple_weight_sum))
+
 }
