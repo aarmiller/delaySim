@@ -38,8 +38,8 @@ sim_miss_visits(sim_data=example_sim_data,
 sim_miss_visits(sim_data=example_sim_data,
                 sim_algorithm = "general")
         
-# Usage with a weight function that places equal weight on all visits. Note: this effectively
-# implements the simple algorithm.                        
+# Usage with a weight function that places equal weight on all visits. 
+# Note: this effectively implements the simple algorithm.                        
 sim_miss_visits(sim_data=example_sim_data,
                 sim_algorithm = "general",
                 sim_ctrl = sim_ctrl(weight_function = function(a,b,c) 1))

@@ -294,7 +294,6 @@ get_SID <- function(data, index_codes, ssd_list){
 #' @return a tibble for the time map of interest
 #' 
 #' @examples
-#' load("/Shared/Statepi_Marketscan/atlan/HCUP_timemap/R/sysdata.rda") #load metadata
 #' index_codes <- codeBuildr::load_disease_codes("ami") # get index codes
 #' ssd_list <- read_csv("/Shared/Statepi_Diagnosis/atlan/delay_dx/params/ssd_codes/ami/ssd_codes.csv") #load ssd codes
 #' ami_time_map <- build_HCUP_time_map(path = "/Shared/Statepi_Marketscan/raw_data/hcup/",
