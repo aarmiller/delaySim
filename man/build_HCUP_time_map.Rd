@@ -25,15 +25,3 @@ a tibble for the time map of interest
 \description{
 Build Delay Time Map with ASCII HCUP Data
 }
-\examples{
-index_codes <- codeBuildr::load_disease_codes("ami") # get index codes
-ssd_list <- read_csv("/Shared/Statepi_Diagnosis/atlan/delay_dx/params/ssd_codes/ami/ssd_codes.csv") #load ssd codes
-ami_time_map <- build_HCUP_time_map(path = "/Shared/Statepi_Marketscan/raw_data/hcup/",
-                                    state = "IA",
-                                    year = "2017",
-                                    index_codes = index_codes,
-                                    ssd_list = ssd_list,
-                                    n_collect = 10000)
-
-
-}

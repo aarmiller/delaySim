@@ -25,5 +25,7 @@ Imports:
     lubridate,
     trend,
     changepoint,
-    stats
+    stats,
+    codeBuildr,
+    readr
 RoxygenNote: 7.1.1
