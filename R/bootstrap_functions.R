@@ -187,6 +187,7 @@ boot_change_point <- function (sim_data, n_sim_trials = 100L,
 #' @param num_cores The number of worker cores to use. If not specified will determined the number of cores based on the which ever
 #' is the smallest value between number of boot_trials or detected number of cores - 1
 #' @param no_bootstrapping Specifies whether you want to run the simulations without bootstrapping the original dataset
+#' 
 #' @examples
 #'
 #' ### Run simulations with bootstrapping and allow change point to vary with each bootstrap sample ###

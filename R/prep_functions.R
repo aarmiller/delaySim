@@ -57,7 +57,9 @@ prep_cp_data <- function(time_map_data,event_name,start_day=1L,by_days=1L){
 #' (i.e. "linear", "cubic", "exponential", etc.)
 #' @param prediction_bound_for_sim Logical to specify whether or not to use the estimated predicted value or the upper bound 90%
 #' prediction value in the simulations. The defualt is FALSE which uses the estimated predicited value
-#'
+#' 
+#' @export
+#' 
 #' @examples
 #'
 #' ## Example to detect change point using cusum ##
@@ -75,8 +77,6 @@ prep_cp_data <- function(time_map_data,event_name,start_day=1L,by_days=1L){
 #' set_cp_method = "cubic")
 #'
 #'
-#'
-#' @export
 #'
 prep_sim_data <- function(time_map_data, by_days=1, start_day=1, time_before=-365, event_name = "any_ssd", cp_method = "lm_quad", specify_cp = NULL,
                                   set_cp_method = NULL, eval_criteria="AIC", week_period=FALSE, prediction_bound_for_sim = FALSE,
