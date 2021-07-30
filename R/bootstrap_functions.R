@@ -288,7 +288,7 @@ run_cp_bootstrap <-   function (sim_data, boot_trials = 100, n_sim_trials = 50,
     cluster <- parallel::makeCluster(num_cores)
 
     parallel::clusterCall(cluster, function() library(tidyverse))
-    parallel::clusterCall(cluster, function() library(delayDX))
+    parallel::clusterCall(cluster, function() library(delaySim))
 
       tmp <- parallel::parLapply(cl = cluster,
                                  1:boot_trials,
