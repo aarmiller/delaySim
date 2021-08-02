@@ -106,7 +106,7 @@ prep_sim_data <- function(time_map_data, by_days=1, start_day=1, time_before=-36
     results <- final_prior_visit_counts %>%
       find_change_point(var_name = "n_miss_visits",
                         method = cp_method,
-                        return_miss_only = TRUE,
+                        return_miss_only = FALSE,
                         eval_criteria = eval_criteria,
                         week_period = week_period,
                         auto_reg = auto_reg,
@@ -117,7 +117,7 @@ prep_sim_data <- function(time_map_data, by_days=1, start_day=1, time_before=-36
     results <- final_prior_visit_counts %>%
       set_change_point(var_name = "n_miss_visits",
                        method = set_cp_method,
-                       return_miss_only = TRUE,
+                       return_miss_only = FALSE,
                        compare_all_methods = FALSE,
                        week_period = week_period,
                        specify_cp = specify_cp)
@@ -126,7 +126,7 @@ prep_sim_data <- function(time_map_data, by_days=1, start_day=1, time_before=-36
 
   #Extract what we want from each of these
   change_point <- results$change_point %>% .$period
-  miss_bins_visits <- results$pred %>%  filter(period <= lm_cube_all_visits_cp) %>% mutate(num_miss = Y - pred1) %>%
+  miss_bins_visits <- results$pred %>%  filter(period <= change_point) %>% mutate(num_miss = Y - pred1) %>%
     mutate(num_miss = ifelse(num_miss < 0, 0, num_miss)) %>% select(period, Y, pred, pred1, num_miss) %>%
     mutate(num_miss = round(num_miss, 0))
 
