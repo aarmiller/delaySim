@@ -16,6 +16,9 @@
 #'
 run_sim_miss_visits <- function (sim_data, trials = 50, no_bootstrapping = FALSE, sim_algorithm="simple", sim_ctrl = NULL,
                                  num_cores = NULL) {
+  #Rename enrolids for sim_miss_visits
+  sim_data$patient_id <- sim_data$enrolid_new
+  
   if (no_bootstrapping == FALSE){
     tmp <- tibble::tibble(trial = 1:trials) %>%
       dplyr::mutate(data = purrr::map(trial,
@@ -129,8 +132,8 @@ boot_change_point <- function (sim_data, n_sim_trials = 100L,
         dplyr::summarise(miss_visits_est = sum(num_miss),
                          miss_visits_obs = sum(Y - pred1))
 
-      # update sim data
-      new_sim_data <- sim_data
+      # update sim data, prepare for run_sim_miss_visits
+      new_sim_data <- sim_data 
       new_sim_data$time_map <- draw_time_map
       new_sim_data$miss_bins_visits <- miss_bins
       new_sim_data$change_point <- sim_cp$change_point$period
