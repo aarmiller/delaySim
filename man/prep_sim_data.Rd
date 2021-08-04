@@ -8,7 +8,7 @@ prep_sim_data(
   time_map_data,
   by_days = 1,
   start_day = 1,
-  time_before = -365,
+  time_before = 365,
   event_name = "any_ssd",
   cp_method = "lm_quad",
   specify_cp = NULL,
