@@ -16,8 +16,6 @@
 #'
 run_sim_miss_visits <- function (sim_data, trials = 50, no_bootstrapping = FALSE, sim_algorithm="simple", sim_ctrl = NULL,
                                  num_cores = NULL) {
-  #Rename enrolids for sim_miss_visits
-  sim_data$patient_id <- sim_data$enrolid_new
   
   if (no_bootstrapping == FALSE){
     tmp <- tibble::tibble(trial = 1:trials) %>%
@@ -83,7 +81,8 @@ boot_change_point <- function (sim_data, n_sim_trials = 100L,
       dplyr::inner_join(select(sim_data$time_map,-enrolid_new), # remove old enrolid_new
                         by = "enrolid") %>%                     # merge back into time map
       dplyr::mutate(enrolid_old=enrolid,                        # old enrolid for tracking
-                    enrolid=enrolid_new)                        # change to new enrolid  (NOTE NEEDS TO OCCUR TO COUNT PATIENTS CORRECTLY)
+                    enrolid=enrolid_new,
+                    patient_id=enrolid_new)                        # change to new enrolid, change name to patient id  (NOTE NEEDS TO OCCUR TO COUNT PATIENTS CORRECTLY)
   } else {
     draw_time_map <- sim_data$time_map
   }
