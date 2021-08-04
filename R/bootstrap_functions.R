@@ -140,30 +140,11 @@ boot_change_point <- function (sim_data, n_sim_trials = 100L,
       # run simulation
       sim_res_results <- run_sim_miss_visits(sim_data = new_sim_data,
                                               trials = n_sim_trials,
+                                              sim_algorithm = sim_algorithm,
+                                              sim_ctrl = sim_ctrl,
                                               no_bootstrapping = no_bootstrapping,
                                               num_cores = num_cores)
 
-    
-
-      # estimated number of missed visits and observed missed visits
-      # note that this is area under the curve and for patients this does not tell us much
-      miss_stats <- miss_bins %>%
-        dplyr::summarise(miss_patients_est = sum(num_miss),
-                         miss_patients_obs = sum(Y - pred1))
-
-      # update sim data
-      new_sim_data <- sim_data
-      new_sim_data$time_map <- draw_time_map
-      new_sim_data$miss_bins_patients <- miss_bins
-      new_sim_data$change_point <- sim_cp$change_point$period
-
-      # run simulation
-      sim_res_results <- run_sim_miss_patients(sim_data = new_sim_data,
-                                                trials = n_sim_trials,
-                                                sim_algorithm = sim_algorithm,
-                                                sim_ctrl = sim_ctrl,
-                                                no_bootstrapping = no_bootstrapping,
-                                                num_cores = num_cores)
       
       # aggregate results
       results <- list(change_point = sim_cp$change_point,
