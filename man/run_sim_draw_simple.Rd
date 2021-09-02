@@ -13,7 +13,7 @@ run_sim_draw_simple(sim_data)
 Draw Missed Visits Using the simple algorithm
 }
 \examples{
-# Basic usage of run_sim_draw_simple 
+# Basic usage of run_sim_draw_simple
 run_sim_draw_simple(sim_data = example_sim_data)
 
 }

@@ -11,7 +11,7 @@ run_sim_draw_general(sim_data, sim_ctrl)
 
 \item{sim_ctrl}{the control function specifying the simulation parameters. This simulation uses
 as a parameter a weighting function, weight_function. The default weight_function is
-the additive function simple_weight_sum() which simply adds together the number of distinct 
+the additive function simple_weight_sum() which simply adds together the number of distinct
 visits, number of distinct SSDs and the number of times previously selected.}
 }
 \description{
