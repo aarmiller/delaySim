@@ -8,6 +8,9 @@ compute_miss_summary <- function(sim_miss_num_data){
 
   out <- sim_miss_num_data %>%
     dplyr::summarise(n_pat = dplyr::n(),                          # number of patients missed
+                     n_pat_inpatient = sum(n_vis_inpatient>0), # number of patients that had inpatient miss
+                     n_pat_outpatient = sum(n_vis_out>0),  # number of patients that had outpatient miss
+                     n_pat_ed = sum(n_vis_ed>0),      # number of patients that had inpatient miss
                      mean_n_vis = mean(n_vis),             # mean number of misses per patient
                      median_n_vis =median(n_vis),          # median number of misses per patient
                      mean_n_vis_out = mean(n_vis_out),     # mean number of ed misses per patient
