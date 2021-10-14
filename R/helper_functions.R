@@ -1,6 +1,6 @@
 
 
-fit_cp_spline <- function(data,x,return_all=FALSE){
+fit_cp_spline <- function(data,x,return_all=FALSE,week_period=FALSE){
 
   fit_spline <- lm(Y ~ splines::bs(t,knots = c(x)), data = data)
 
@@ -33,32 +33,56 @@ fit_cp_spline <- function(data,x,return_all=FALSE){
   return(out)
 }
 
-fit_cp_cube <- function(data,x,return_all=FALSE){
+fit_cp_cube <- function(data,x,return_all=FALSE,week_period=FALSE){
 
   new_data <- data %>%
     dplyr::mutate(post=t>x,
                   shift=t-x,
                   shift2=shift^2,
-                  shift3=shift^3)
-
+                  shift3=shift^3,
+                  week_period=as.factor(t %% 7))
+  if(week_period){
+  fit <- glm(Y~I(post):I(shift)+I(post):I(shift2)+I(post):I(shift3)+week_period,data=new_data)  
+  } else{
   fit <- glm(Y~I(post):I(shift)+I(post):I(shift2)+I(post):I(shift3),data=new_data)
+  }
 
   ilink <- family(fit)$linkinv
 
   if (return_all==TRUE){
-
+    if(week_period){
     preds_out <- new_data %>%
-      dplyr::select(period,Y,t,post,shift,shift2,shift3) %>%
+      dplyr::select(period,Y,t,post,shift,shift2,shift3,week_period) %>%
       modelr::add_predictions(fit) %>%
       dplyr::mutate(pred1=fit$coefficients["(Intercept)"] +
                       fit$coefficients["I(post)FALSE:I(shift)"]*shift +
                       fit$coefficients["I(post)FALSE:I(shift2)"]*shift2 +
-                      fit$coefficients["I(post)FALSE:I(shift3)"]*shift3,
+                      fit$coefficients["I(post)FALSE:I(shift3)"]*shift3 +
+                      fit$coefficients["week_period1"]*(week_period == 1) +
+                      fit$coefficients["week_period2"]*(week_period == 2) +
+                      fit$coefficients["week_period3"]*(week_period == 3) +
+                      fit$coefficients["week_period4"]*(week_period == 4) +
+                      fit$coefficients["week_period5"]*(week_period == 5) +
+                      fit$coefficients["week_period6"]*(week_period == 6),
                     se_fit=predict(fit, type = "link", se.fit = TRUE)$se.fit,
                     pred_low=ilink(pred - (2*se_fit)),
                     pred_high=ilink(pred + (2*se_fit)),
                     pred=ilink(pred),
                     pred1=ilink(pred1))
+    } else{
+      preds_out <- new_data %>%
+        dplyr::select(period,Y,t,post,shift,shift2,shift3) %>%
+        modelr::add_predictions(fit) %>%
+        dplyr::mutate(pred1=fit$coefficients["(Intercept)"] +
+                        fit$coefficients["I(post)FALSE:I(shift)"]*shift +
+                        fit$coefficients["I(post)FALSE:I(shift2)"]*shift2 +
+                        fit$coefficients["I(post)FALSE:I(shift3)"]*shift3,
+                      se_fit=predict(fit, type = "link", se.fit = TRUE)$se.fit,
+                      pred_low=ilink(pred - (2*se_fit)),
+                      pred_high=ilink(pred + (2*se_fit)),
+                      pred=ilink(pred),
+                      pred1=ilink(pred1))
+    }
 
     out <- list(fit=fit,
                 pred=preds_out,
@@ -72,19 +96,42 @@ fit_cp_cube <- function(data,x,return_all=FALSE){
   return(out)
 }
 
-fit_cp_quad <- function(data,x,return_all=FALSE){
+fit_cp_quad <- function(data,x,return_all=FALSE,week_period=FALSE){
 
   new_data <- data %>%
     dplyr::mutate(post=t>x,
                   shift=t-x,
-                  shift2=shift^2)
-
-  fit <- glm(Y~I(post):I(shift)+I(post):I(shift2),data=new_data)
-
+                  shift2=shift^2,
+                  week_period=as.factor(t %% 7))
+  if (week_period){
+  fit <- glm(Y~I(post):I(shift)+I(post):I(shift2)+week_period,data=new_data)
+  } else{
+  fit <- glm(Y~I(post):I(shift)+I(post):I(shift2),data=new_data) 
+  }
+  
   ilink <- family(fit)$linkinv
 
   if (return_all==TRUE){
 
+    if(week_period){
+      preds_out <- new_data %>%
+        dplyr::select(period,Y,t,post,shift,shift2,week_period) %>%
+        modelr::add_predictions(fit) %>%
+        dplyr::mutate(pred1=fit$coefficients["(Intercept)"] +
+                        fit$coefficients["I(post)FALSE:I(shift)"]*shift +
+                        fit$coefficients["I(post)FALSE:I(shift2)"]*shift2 +
+                        fit$coefficients["week_period1"]*(week_period == 1) +
+                        fit$coefficients["week_period2"]*(week_period == 2) +
+                        fit$coefficients["week_period3"]*(week_period == 3) +
+                        fit$coefficients["week_period4"]*(week_period == 4) +
+                        fit$coefficients["week_period5"]*(week_period == 5) +
+                        fit$coefficients["week_period6"]*(week_period == 6),
+                      se_fit=predict(fit, type = "link", se.fit = TRUE)$se.fit,
+                      pred_low=ilink(pred - (2*se_fit)),
+                      pred_high=ilink(pred + (2*se_fit)),
+                      pred=ilink(pred),
+                      pred1=ilink(pred1))
+    } else{
     preds_out <- new_data %>%
       dplyr::select(period,Y,t,post,shift,shift2) %>%
       modelr::add_predictions(fit) %>%
@@ -96,6 +143,7 @@ fit_cp_quad <- function(data,x,return_all=FALSE){
                     pred_high=ilink(pred + (2*se_fit)),
                     pred=ilink(pred),
                     pred1=ilink(pred1))
+    }
 
     out <- list(fit=fit,
                 pred=preds_out,
@@ -109,14 +157,37 @@ fit_cp_quad <- function(data,x,return_all=FALSE){
   return(out)
 }
 
-fit_cp_exp <- function(data,x,return_all=FALSE){
+fit_cp_exp <- function(data,x,return_all=FALSE,week_period=FALSE){
 
+  data <- data %>%
+    dplyr::mutate(week_period=as.factor(t %% 7))
+  
+  if(week_period){
+  fit <- glm(Y~I((t-x))+I((t-x)):I(t>x)+week_period,family = gaussian("log"),data=data)
+  } else{
   fit <- glm(Y~I((t-x))+I((t-x)):I(t>x),family = gaussian("log"),data=data)
+  }
 
   ilink <- family(fit)$linkinv
 
   if (return_all==TRUE){
 
+    if(week_period){
+      dplyr::select(period,Y,t,week_period) %>%
+        modelr::add_predictions(fit) %>%
+        dplyr::mutate(pred1=(fit$coefficients[1] + fit$coefficients[2]*(t-x)+
+                               fit$coefficients["week_period1"]*(week_period == 1) +
+                               fit$coefficients["week_period2"]*(week_period == 2) +
+                               fit$coefficients["week_period3"]*(week_period == 3) +
+                               fit$coefficients["week_period4"]*(week_period == 4) +
+                               fit$coefficients["week_period5"]*(week_period == 5) +
+                               fit$coefficients["week_period6"]*(week_period == 6)),
+                      se_fit=predict(fit, type = "link", se.fit = TRUE)$se.fit,
+                      pred_low=ilink(pred - (2*se_fit)),
+                      pred_high=ilink(pred + (2*se_fit)),
+                      pred=ilink(pred),
+                      pred1=ilink(pred1))
+    } else{
     preds_out <- data %>%
       dplyr::select(period,Y,t) %>%
       modelr::add_predictions(fit) %>%
@@ -126,7 +197,8 @@ fit_cp_exp <- function(data,x,return_all=FALSE){
                     pred_high=ilink(pred + (2*se_fit)),
                     pred=ilink(pred),
                     pred1=ilink(pred1))
-
+      }
+    
     out <- list(fit=fit,
                 pred=preds_out,
                 stats=broom::glance(fit))
@@ -139,14 +211,38 @@ fit_cp_exp <- function(data,x,return_all=FALSE){
   return(out)
 }
 
-fit_cp_lm <- function(data,x,return_all=FALSE){
+fit_cp_lm <- function(data,x,return_all=FALSE,week_period=FALSE){
 
-  fit <- glm(Y~I(t-x)+I(t-x):I(t>x),data=data)
+  data <- data %>%
+    dplyr::mutate(week_period=as.factor(t %% 7))
+  
+  if (week_period){
+    fit <- glm(Y~I(t-x)+I(t-x):I(t>x)+week_period,data=data)
+  } else{
+    fit <- glm(Y~I(t-x)+I(t-x):I(t>x)+week_period,data=data)
+  }
 
   ilink <- family(fit)$linkinv
 
   if (return_all==TRUE){
 
+    if (week_period){
+      preds_out <- data %>%
+        dplyr::select(period,Y,t,week_period) %>%
+        modelr::add_predictions(fit) %>%
+        dplyr::mutate(pred1=fit$coefficients[1] + fit$coefficients[2]*(t-x)+
+                        fit$coefficients["week_period1"]*(week_period == 1) +
+                        fit$coefficients["week_period2"]*(week_period == 2) +
+                        fit$coefficients["week_period3"]*(week_period == 3) +
+                        fit$coefficients["week_period4"]*(week_period == 4) +
+                        fit$coefficients["week_period5"]*(week_period == 5) +
+                        fit$coefficients["week_period6"]*(week_period == 6),
+                      se_fit=predict(fit, type = "link", se.fit = TRUE)$se.fit,
+                      pred_low=ilink(pred - (2*se_fit)),
+                      pred_high=ilink(pred + (2*se_fit)),
+                      pred=ilink(pred),
+                      pred1=ilink(pred1))
+    } else{
     preds_out <- data %>%
       dplyr::select(period,Y,t) %>%
       modelr::add_predictions(fit) %>%
@@ -156,6 +252,7 @@ fit_cp_lm <- function(data,x,return_all=FALSE){
                     pred_high=ilink(pred + (2*se_fit)),
                     pred=ilink(pred),
                     pred1=ilink(pred1))
+    }
 
     out <- list(fit=fit,
                 pred=preds_out,
@@ -169,20 +266,43 @@ fit_cp_lm <- function(data,x,return_all=FALSE){
   return(out)
 }
 
-fit_cp_lm_quad <- function(data,x,return_all=FALSE){
+fit_cp_lm_quad <- function(data,x,return_all=FALSE,week_period=FALSE){
 
   # shift time
   new_data <- data %>%
     dplyr::mutate(t2=t>x,
                   shift=t-x,
-                  shift2=shift^2*t2)
+                  shift2=shift^2*t2,
+                  week_period=as.factor(t %% 7))
 
-  fit <- glm(Y~shift+shift2,data=new_data)
+  if (week_period){
+    fit <- glm(Y~shift+shift2+week_period,data=new_data)
+  } else{
+    fit <- glm(Y~shift+shift2,data=new_data)
+  }
+  
 
   ilink <- family(fit)$linkinv
 
   if (return_all==TRUE){
-
+    
+    if(week_period){
+      preds <- new_data %>%
+        dplyr::select(period,Y,t,shift,shift2,week_period) %>%
+        modelr::add_predictions(fit) %>%
+        dplyr::mutate(pred1=fit$coefficients[1] + fit$coefficients[2]*shift+
+                        fit$coefficients["week_period1"]*(week_period == 1) +
+                        fit$coefficients["week_period2"]*(week_period == 2) +
+                        fit$coefficients["week_period3"]*(week_period == 3) +
+                        fit$coefficients["week_period4"]*(week_period == 4) +
+                        fit$coefficients["week_period5"]*(week_period == 5) +
+                        fit$coefficients["week_period6"]*(week_period == 6),
+                      se_fit=predict(fit, type = "link", se.fit = TRUE)$se.fit,
+                      pred_low=ilink(pred - (2*se_fit)),
+                      pred_high=ilink(pred + (2*se_fit)),
+                      pred=ilink(pred),
+                      pred1=ilink(pred1))
+    } else{
     preds <- new_data %>%
       dplyr::select(period,Y,t,shift,shift2) %>%
       modelr::add_predictions(fit) %>%
@@ -192,6 +312,7 @@ fit_cp_lm_quad <- function(data,x,return_all=FALSE){
                     pred_high=ilink(pred + (2*se_fit)),
                     pred=ilink(pred),
                     pred1=ilink(pred1))
+    }
 
     out <- list(fit=fit,
                 pred=preds,
@@ -206,20 +327,15 @@ fit_cp_lm_quad <- function(data,x,return_all=FALSE){
   return(out)
 }
 
-fit_cp_lm_cube <- function(data,x,return_all=FALSE,periodicity=FALSE){
+fit_cp_lm_cube <- function(data,x,return_all=FALSE,week_period=FALSE){
 
   # shift time
   new_data <- data %>%
     dplyr::mutate(t2=t>x,
                   shift=t-x,
                   shift2=shift^2*t2,
-                  shift3=shift^3*t2)
-
-  if(periodicity){
-    new_data <- new_data  %>%
-    mutate(week_period = as.factor(t %% 7))
-    new_data <- within(new_data, week_period <- relevel(week_period, ref=1))
-  }
+                  shift3=shift^3*t2,
+                  week_period=as.factor(t %% 7))
 
   if(periodicity){
     fit <- glm(Y~shift+shift2+shift3+week_period,data=new_data)
@@ -230,29 +346,22 @@ fit_cp_lm_cube <- function(data,x,return_all=FALSE,periodicity=FALSE){
 
   if (return_all==TRUE){
 
-    if(periodicity){
+    if(week_period){
       preds <- new_data %>%
-      dplyr::select(period,Y,t,shift,shift2,shift3,week_period) %>%
-      dplyr::mutate(week_var=paste0("week_period",as.character(week_period)))
-
-    preds$week_coeff <- numeric(nrow(preds))
-
-    for(l in 1:nrow(preds)){
-      if(preds$week_var[l]=="week_period0"){
-        preds$week_coeff[l] <- 0
-      } else{
-        preds$week_coeff[l] <- fit$coefficients[[ preds$week_var[l] ]]
-      }
-    }
-
-    preds <- preds %>%
-      modelr::add_predictions(fit) %>%
-      dplyr::mutate(pred1=fit$coefficients[1] + fit$coefficients[2]*shift + week_coeff,
-                    se_fit=predict(fit, type = "link", se.fit = TRUE)$se.fit,
-                    pred_low=ilink(pred - (2*se_fit)),
-                    pred_high=ilink(pred + (2*se_fit)),
-                    pred=ilink(pred),
-                    pred1=ilink(pred1))
+        dplyr::select(period,Y,t,shift,shift2,shift3,week_period) %>%
+        modelr::add_predictions(fit) %>%
+        dplyr::mutate(pred1=fit$coefficients[1] + fit$coefficients[2]*shift+
+                        fit$coefficients["week_period1"]*(week_period == 1) +
+                        fit$coefficients["week_period2"]*(week_period == 2) +
+                        fit$coefficients["week_period3"]*(week_period == 3) +
+                        fit$coefficients["week_period4"]*(week_period == 4) +
+                        fit$coefficients["week_period5"]*(week_period == 5) +
+                        fit$coefficients["week_period6"]*(week_period == 6),
+                      se_fit=predict(fit, type = "link", se.fit = TRUE)$se.fit,
+                      pred_low=ilink(pred - (2*se_fit)),
+                      pred_high=ilink(pred + (2*se_fit)),
+                      pred=ilink(pred),
+                      pred1=ilink(pred1))
     } else{
 
       preds <- new_data %>%

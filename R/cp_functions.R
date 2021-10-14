@@ -633,43 +633,43 @@ find_cp_linreg <- function(data,var_name="n_miss_visits",method="lm",eval_criter
     if (method=="spline"){
       fits = tibble::tibble(cp=3:max(data$t)) %>%
         dplyr::mutate(res=purrr::map(cp,
-                                     ~fit_cp_spline(data = data, x=.) )) %>%
+                                     ~fit_cp_spline(data = data, x=., week_period = week_period) )) %>%
         tidyr::unnest(res)
     }
 
     if (method=="lm"){
       fits = tibble::tibble(cp=2:max(data$t)) %>%
-        dplyr::mutate(res=purrr::map(cp, ~fit_cp_lm(data = data, x=.) )) %>%
+        dplyr::mutate(res=purrr::map(cp, ~fit_cp_lm(data = data, x=., week_period = week_period) )) %>%
         tidyr::unnest(res)
     }
 
     if (method=="lm_cube"){
       fits = tibble::tibble(cp=2:max(data$t)) %>%
-        dplyr::mutate(res=purrr::map(cp, ~fit_cp_lm_cube(data = data, x=., periodicity=week_period) )) %>%
+        dplyr::mutate(res=purrr::map(cp, ~fit_cp_lm_cube(data = data, x=., week_period = week_period) )) %>%
         tidyr::unnest(res)
     }
 
     if (method=="cube"){
       fits = tibble::tibble(cp=2:max(data$t)) %>%
-        dplyr::mutate(res=purrr::map(cp, ~fit_cp_cube(data = data, x=.) )) %>%
+        dplyr::mutate(res=purrr::map(cp, ~fit_cp_cube(data = data, x=., week_period = week_period) )) %>%
         tidyr::unnest(res)
     }
 
     if (method=="quad"){
       fits = tibble::tibble(cp=2:max(data$t)) %>%
-        dplyr::mutate(res=purrr::map(cp, ~fit_cp_quad(data = data, x=.) )) %>%
+        dplyr::mutate(res=purrr::map(cp, ~fit_cp_quad(data = data, x=., week_period = week_period) )) %>%
         tidyr::unnest(res)
     }
 
     if (method=="lm_quad"){
       fits = tibble::tibble(cp=2:max(data$t)) %>%
-        dplyr::mutate(res=purrr::map(cp, ~fit_cp_lm_quad(data = data, x=.) )) %>%
+        dplyr::mutate(res=purrr::map(cp, ~fit_cp_lm_quad(data = data, x=., week_period = week_period) )) %>%
         tidyr::unnest(res)
     }
 
     if (method=="exp"){
       fits = tibble::tibble(cp=2:max(data$t)) %>%
-        dplyr::mutate(res=purrr::map(cp, ~fit_cp_exp(data = data, x=.) )) %>%
+        dplyr::mutate(res=purrr::map(cp, ~fit_cp_exp(data = data, x=., week_period = week_period) )) %>%
         tidyr::unnest(res)
     }
 
@@ -682,60 +682,60 @@ find_cp_linreg <- function(data,var_name="n_miss_visits",method="lm",eval_criter
     change_t <- data$t[data$period == specify_cp]
 
     if (method=="spline"){
-      fits = fit_cp_spline(data = data, x=change_t)
+      fits = fit_cp_spline(data = data, x=change_t, week_period = week_period)
     }
 
     if (method=="lm"){
-      fits = fit_cp_lm(data = data, x=change_t)
+      fits = fit_cp_lm(data = data, x=change_t, week_period = week_period)
     }
 
     if (method=="lm_cube"){
-      fits = fit_cp_lm_cube(data = data, x=change_t, periodicity=week_period)
+      fits = fit_cp_lm_cube(data = data, x=change_t, week_period = week_period)
     }
 
     if (method=="cube"){
-      fits = fit_cp_cube(data = data, x=change_t)
+      fits = fit_cp_cube(data = data, x=change_t, week_period = week_period)
     }
 
     if (method=="quad"){
-      fits = fit_cp_quad(data = data, x=change_t)
+      fits = fit_cp_quad(data = data, x=change_t, week_period = week_period)
     }
 
     if (method=="lm_quad"){
-      fits = fit_cp_lm_quad(data = data, x=change_t)
+      fits = fit_cp_lm_quad(data = data, x=change_t, week_period = week_period)
     }
 
     if (method=="exp"){
-      fits = fit_cp_exp(data = data, x=change_t)
+      fits = fit_cp_exp(data = data, x=change_t, week_period = week_period)
     }
   }
 
   if (method=="spline"){
-    out <- fit_cp_spline(data = data, x=change_t,return_all = TRUE)
+    out <- fit_cp_spline(data = data, x=change_t,return_all = TRUE, week_period = week_period)
   }
 
   if (method=="quad"){
-    out <- fit_cp_quad(data = data, x=change_t,return_all = TRUE)
+    out <- fit_cp_quad(data = data, x=change_t,return_all = TRUE, week_period = week_period)
   }
 
   if (method=="cube"){
-    out <- fit_cp_cube(data = data, x=change_t,return_all = TRUE)
+    out <- fit_cp_cube(data = data, x=change_t,return_all = TRUE, week_period = week_period)
   }
 
   if (method=="lm"){
-    out <- fit_cp_lm(data = data, x=change_t,return_all = TRUE)
+    out <- fit_cp_lm(data = data, x=change_t,return_all = TRUE, week_period = week_period)
   }
 
   if (method=="lm_quad"){
-    out <- fit_cp_lm_quad(data = data, x=change_t,return_all = TRUE)
+    out <- fit_cp_lm_quad(data = data, x=change_t,return_all = TRUE, week_period = week_period)
   }
 
   if (method=="lm_cube"){
-    out <- fit_cp_lm_cube(data = data, x=change_t,return_all = TRUE, periodicity=week_period)
+    out <- fit_cp_lm_cube(data = data, x=change_t,return_all = TRUE, week_period = week_period)
   }
 
   if (method=="exp"){
-    out <- fit_cp_exp(data = data, x=change_t,return_all = TRUE)
+    out <- fit_cp_exp(data = data, x=change_t,return_all = TRUE, week_period = week_period)
   }
 
 
