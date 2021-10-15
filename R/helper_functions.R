@@ -337,10 +337,10 @@ fit_cp_lm_cube <- function(data,x,return_all=FALSE,week_period=FALSE){
                   shift3=shift^3*t2,
                   week_period=as.factor(t %% 7))
 
-  if(periodicity){
+  if(week_period){
     fit <- glm(Y~shift+shift2+shift3+week_period,data=new_data)
   } else {
-  fit <- glm(Y~shift+shift2+shift3,data=new_data)
+    fit <- glm(Y~shift+shift2+shift3,data=new_data)
   }
   ilink <- family(fit)$linkinv
 
@@ -350,7 +350,7 @@ fit_cp_lm_cube <- function(data,x,return_all=FALSE,week_period=FALSE){
       preds <- new_data %>%
         dplyr::select(period,Y,t,shift,shift2,shift3,week_period) %>%
         modelr::add_predictions(fit) %>%
-        dplyr::mutate(pred1=fit$coefficients[1] + fit$coefficients[2]*shift+
+        dplyr::mutate(pred1=fit$coefficients[1] + fit$coefficients[2]*shift +
                         fit$coefficients["week_period1"]*(week_period == 1) +
                         fit$coefficients["week_period2"]*(week_period == 2) +
                         fit$coefficients["week_period3"]*(week_period == 3) +
