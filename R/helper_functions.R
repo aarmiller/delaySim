@@ -219,7 +219,7 @@ fit_cp_lm <- function(data,x,return_all=FALSE,week_period=FALSE){
   if (week_period){
     fit <- glm(Y~I(t-x)+I(t-x):I(t>x)+week_period,data=data)
   } else{
-    fit <- glm(Y~I(t-x)+I(t-x):I(t>x)+week_period,data=data)
+    fit <- glm(Y~I(t-x)+I(t-x):I(t>x),data=data)
   }
 
   ilink <- family(fit)$linkinv
