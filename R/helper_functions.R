@@ -173,6 +173,7 @@ fit_cp_exp <- function(data,x,return_all=FALSE,week_period=FALSE){
   if (return_all==TRUE){
 
     if(week_period){
+      preds_out <- data %>%
       dplyr::select(period,Y,t,week_period) %>%
         modelr::add_predictions(fit) %>%
         dplyr::mutate(pred1=(fit$coefficients[1] + fit$coefficients[2]*(t-x)+
