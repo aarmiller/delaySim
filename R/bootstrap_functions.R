@@ -89,7 +89,7 @@ boot_change_point <- function (sim_data, n_sim_trials = 100L,
   # simulation change-point data
   sim_cp <- prep_cp_data(draw_time_map,
                          event_name = "miss_ind",   # note the count value has already been selected in the sim data
-                         start_day = 0L,  # to account for adjusted days_since_dx value
+                         start_day = 1L,  
                          by_days = 1L)
 
     if (sim_data$cp_method != "set_cp"){
