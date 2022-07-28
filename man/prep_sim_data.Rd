@@ -16,7 +16,8 @@ prep_sim_data(
   eval_criteria = "AIC",
   week_period = FALSE,
   prediction_bound_for_sim = FALSE,
-  auto_reg = FALSE
+  auto_reg = FALSE,
+  dur_bins = 1:30
 )
 }
 \arguments{
@@ -50,6 +51,9 @@ prediction value in the simulations. The defualt is FALSE which uses the estimat
 
 \item{auto_reg}{Logical that determines whether expected counts use a time-series framework that incorporates autoregression.
 Will automatically fit periodicity, automatically setting week_period to TRUE. Only relevant for cusum and pettitt methods}
+
+\item{dur_bins}{Numeric vector containing all days for which the simulations should calculate delay duration statistics. 
+If values contained in this vector are greater than the changepoint, they will be omitted from the output.}
 }
 \description{
 Prepare data for simulation

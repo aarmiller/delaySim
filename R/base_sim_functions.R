@@ -77,7 +77,8 @@ sim_miss_visits <- function (sim_data, sim_algorithm="simple", sim_ctrl = NULL) 
 
   ## build table of duration of missed visits
   sim_trial_duration_table <- compute_sim_trial_duration_table(sim_miss_num_data = sim_miss_num,
-                                                                upper_bound = sim_data$change_point)
+                                                               upper_bound = sim_data$change_point,
+                                                               dur_bins = sim_data$dur_bins)
   #sim_trial_duration_table <- NULL
 
   ## Compute summary statistics across all patients ###

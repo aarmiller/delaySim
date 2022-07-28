@@ -87,18 +87,10 @@ compute_sim_trial_n_visit_table <- function(sim_miss_num_data,total_patients){
 #'
 #'
 #' @export
-compute_sim_trial_duration_table <- function(sim_miss_num_data, upper_bound){
+compute_sim_trial_duration_table <- function(sim_miss_num_data, upper_bound, dur_bins){
   ## compute range of miss durations ##
   # use change point to define upper bound of range
-  x <-  cut(0:upper_bound, 10)
-
-  range <- c(0)
-  for (i in levels(x)){
-    y <- stringr::str_split(i, ",")
-    y <- y[[1]][2]
-    z <- floor(as.numeric(stringr::str_remove(y, "]")))
-    range <- c(range, z)
-  }
+  range <-  dur_bins[dur_bins <= upper_bound]
 
   ## compute table of miss durations ##
   duration_miss <- tibble::tibble(bins= range) %>%

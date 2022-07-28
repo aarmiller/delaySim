@@ -57,6 +57,8 @@ prep_cp_data <- function(time_map_data,event_name,start_day=1L,by_days=1L){
 #' (i.e. "linear", "cubic", "exponential", etc.)
 #' @param prediction_bound_for_sim Logical to specify whether or not to use the estimated predicted value or the upper bound 90%
 #' prediction value in the simulations. The defualt is FALSE which uses the estimated predicited value
+#' @param dur_bins Numeric vector containing all days for which the simulations should calculate delay duration statistics. 
+#' If values contained in this vector are greater than the changepoint, they will be omitted from the output.
 #' 
 #' @export
 #' 
@@ -80,7 +82,7 @@ prep_cp_data <- function(time_map_data,event_name,start_day=1L,by_days=1L){
 #'
 prep_sim_data <- function(time_map_data, by_days=1, start_day=1, time_before=365, event_name = "any_ssd", cp_method = "lm_quad", specify_cp = NULL,
                                   set_cp_method = NULL, eval_criteria="AIC", week_period=FALSE, prediction_bound_for_sim = FALSE,
-                                  auto_reg=FALSE){
+                                  auto_reg=FALSE, dur_bins=1:30){
 
   if (cp_method == "set_cp" & (is.null(specify_cp) | is.null(set_cp_method))){
     stop("If using the 'set_cp' method for cp_method, specify_cp and set_cp_method cannot be NULL")
@@ -147,7 +149,8 @@ prep_sim_data <- function(time_map_data, by_days=1, start_day=1, time_before=365
               specify_cp = specify_cp,
               auto_reg = auto_reg,
               set_cp_method = set_cp_method,
-              prediction_bound_for_sim = prediction_bound_for_sim)
+              prediction_bound_for_sim = prediction_bound_for_sim,
+              dur_bins=dur_bins)
   )
 
 

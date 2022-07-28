@@ -4,9 +4,9 @@
 \alias{compute_sim_trial_duration_table}
 \title{Compute simulation trial duration table}
 \usage{
-compute_sim_trial_duration_table(sim_miss_num_data, upper_bound)
+compute_sim_trial_duration_table(sim_miss_num_data, upper_bound, dur_bins)
 
-compute_sim_trial_duration_table(sim_miss_num_data, upper_bound)
+compute_sim_trial_duration_table(sim_miss_num_data, upper_bound, dur_bins)
 }
 \description{
 Compute simulation trial duration table
