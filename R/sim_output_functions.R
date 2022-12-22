@@ -7,15 +7,23 @@
 compute_miss_summary <- function(sim_miss_num_data){
 
   out <- sim_miss_num_data %>%
-    dplyr::summarise(n_pat = dplyr::n(),                          # number of patients missed
+    dplyr::summarise(n_pat = dplyr::n(),                   # number of patients missed
                      mean_n_vis = mean(n_vis),             # mean number of misses per patient
                      median_n_vis =median(n_vis),          # median number of misses per patient
-                     mean_n_vis_out = mean(n_vis_out),     # mean number of ed misses per patient
-                     median_n_vis_out =median(n_vis_out),  # median number of ed misses per patient
+                     min_n_vis = min(n_vis),               # min number of misses per patient
+                     max_n_vis = max(n_vis),               # max number of misses per patient
+                     mean_n_vis_out = mean(n_vis_out),     # mean number of outpatient misses per patient
+                     median_n_vis_out =median(n_vis_out),  # median number of outpatient misses per patient
+                     min_n_vis_out = min(n_vis_out),       # min number of outpatient misses per patient
+                     max_n_vis_out = max(n_vis_out),       # max number of outpatient misses per patient
                      mean_n_vis_ed = mean(n_vis_ed),       # mean number of ed misses per patient
                      median_n_vis_ed =median(n_vis_ed),    # median number of ed misses per patient
+                     min_n_vis_ed = min(n_vis_ed),         # min number of ed misses per patient
+                     max_n_vis_ed = max(n_vis_ed),         # max number of ed misses per patient
                      mean_n_vis_inpatient = mean(n_vis_inpatient),     # mean number of ed misses per patient
                      median_n_vis_inpatient = median(n_vis_inpatient),  # median number of ed misses per patient
+                     min_n_vis_inpatient= min(n_vis_inpatient),         # min number of inpatient misses per patient
+                     max_n_vis_inpatient = max(n_vis_inpatient),        # max number of inpatient misses per patient
                      min_dur = min(dur),           # min duration
                      mean_dur = mean(dur),         # mean miss duration
                      median_dur = median(dur),     # median miss duration
